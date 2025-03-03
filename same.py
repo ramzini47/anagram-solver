@@ -1,3 +1,4 @@
+#!/usr/bin/python3.10
 import argparse
 import time
 import os
@@ -80,20 +81,24 @@ def find_matching_words(letters):
 
 def main():
     """Command-line interface for the word finder script."""
-    parser = argparse.ArgumentParser(description="Find words in odm.txt that match a given set of letters.")
-    parser.add_argument("letters", nargs="?", help="The letters to search for (e.g., 'reneginapi'). If not provided, user will be prompted.")
+    parser = argparse.ArgumentParser(
+        description="Find words in odm.txt that match a given set of letters.",
+        usage="same.py [letters]"
+    )
+    parser.add_argument("letters", nargs="?", help="The letters to search for (e.g., ./same.py reneginapi).")
 
     args = parser.parse_args()
+
+    # If no letters are provided, show help message and exit
+    if args.letters is None:
+        parser.print_help()
+        exit(1)
 
     # Ensure the dictionary file is available
     download_and_extract()
 
-    # If letters are provided via CLI, use them; otherwise, ask for input
-    if args.letters:
-        letters = args.letters.strip().lower()
-    else:
-        letters = input("Enter letters (without spaces, e.g., 'reneginapi'): ").strip().lower()
-
+    # Run word-finding logic
+    letters = args.letters.strip().lower()
     find_matching_words(letters)
 
 if __name__ == "__main__":
